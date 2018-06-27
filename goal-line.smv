@@ -1,0 +1,28 @@
+MODULE main
+ VAR
+   goal-line : {goal, nothing} ;
+   ball : process ball(goal-line) ;
+ ASSIGN
+   init(goal-line) := nothing ;
+
+MODULE ball(goal-line)
+ VAR
+   state : {inside, outside} ;
+ ASSIGN
+   init(state) := outside ;
+   next(state) := case
+                    -- ball might go in or not
+                    state = outside : {inside, outside} ;
+                    -- ball must go out before going in again
+                    state = inside  : outside ;
+                  esac ;
+   next(goal-line) := case
+                        -- when ball goes in, goal!
+                        state = inside : goal ;
+                        -- after indicating goal, stop
+                        goal-line = goal : nothing ;
+                        state = outside : nothing ;
+                        goal-line = nothing : nothing ;
+                      esac ;
+ FAIRNESS
+   running
