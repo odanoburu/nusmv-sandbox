@@ -15,5 +15,6 @@ a repo to play around with [[nusmv.fbk.eu][NuSMV]].
 - =print_fair_transitions [-f format (dot, etc)] [-o output file]= :: print
      finite-state machine
 
-* async processess
-are apparently being deprecated, so should probably be avoided?
+* questions
+- async processess are apparently being deprecated, so should probably
+  be avoided?

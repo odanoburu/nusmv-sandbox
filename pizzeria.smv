@@ -1,0 +1,37 @@
+MODULE oven(open-ovens)
+ VAR
+   state : {open, idle, heating, cooking} ;
+ ASSIGN
+   init(state) := idle ;
+   next(state) := case
+                    open-ovens != 2 : {open, idle, heating, cooking} ;
+                    open-ovens = 2 : heating ;
+                  esac ;
+
+MODULE main
+ VAR
+   open-ovens : integer ;
+   oven-1 : oven(open-ovens) ;
+   oven-2 : oven(open-ovens) ;
+   oven-3 : oven(open-ovens) ;
+ ASSIGN
+   init(open-ovens) := 0 ;
+
+ -- not all three ovens can be open at the same time
+ CTLSPEC AG ! (oven-1.state = open & oven-2.state = open & oven-3.state = open)
+ -- if any two ovens are open, the other is heating
+ CTLSPEC AG oven-1.state = open & oven-2.state = open -> oven-3.state = heating
+ CTLSPEC AG oven-1.state = open & oven-3.state = open -> oven-2.state = heating
+ CTLSPEC AG oven-2.state = open & oven-3.state = open -> oven-1.state = heating
+
+/-- Considere uma pizzaria com 3 fornos. Por razões de segurança,
+somente dois fornos podem ser abertos por vez. Mesmo assim,
+toda vez que dois fornos são abertos, para evitar sobrecarga, o
+terceiro forno deve estar em pré-aquecimento.
+- Uma pizza leva 30 min para estar pronta, após 5 minutos de
+pré-aquecimento, e, se o tempo passar de 30 min a pizza ficará
+queimada.
+
+Problema
+=> Projetar o sistema de controle de abertura de portas de forno e
+gerenciamento da fabricação de pizzas --/
