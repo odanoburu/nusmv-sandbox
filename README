@@ -7,10 +7,13 @@ a repo to play around with [[nusmv.fbk.eu][NuSMV]].
 
 - =go= :: initialize system
 
-- =pick_state [-i] [-r]= :: pick initial state
+- =pick_state [-i interactively] [-r randomly]= :: pick initial state
 
-- =simulate= :: [-i] for interactively choosing transitions
-                [-k] limits number of steps
+- =simulate [-i interactively] [-k max number of steps]= :: simulate
+     transitions
+
+- =print_fair_transitions [-f format (dot, etc)] [-o output file]= :: print
+     finite-state machine
 
 * async processess
 are apparently being deprecated, so should probably be avoided?
