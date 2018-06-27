@@ -1,0 +1,16 @@
+# -*- mode:org -*-
+#+TITLE: NuSMV notes
+
+a repo to play around with [[nusmv.fbk.eu][NuSMV]].
+
+* useful shell commands
+
+- =go= :: initialize system
+
+- =pick_state [-i] [-r]= :: pick initial state
+
+- =simulate= :: [-i] for interactively choosing transitions
+                [-k] limits number of steps
+
+* async processess
+are apparently being deprecated, so should probably be avoided?
