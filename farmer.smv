@@ -5,7 +5,7 @@ MODULE main
    things : array 0..2 of boolean ;
    across : boolean ;
  ASSIGN
-   init(takes) := nothing ;
+   init(takes) := 1 ;
    -- everyone starts not-across the river
    init(things[0]) := FALSE ;
    init(things[1]) := FALSE ;
@@ -33,10 +33,5 @@ MODULE main
    next(things[2]) := takes = 2 ? ! things[2] : things [2] ;
    -- don't move farmer if over
    next(across) := takes = over ? across : ! across ;
- INVARSPEC ! (across != things[0] & across != things[1]) ;
-
-MODULE thing(taken)
- VAR
-   across : boolean ;
- DEFINE
-   across :=
+   
+-- INVARSPEC ! (across != things[0] & across != things[1]) ;
