@@ -1,0 +1,42 @@
+MODULE main
+ VAR
+   -- 0 : cabbage, 1 : lamb, 2 : wolf
+   takes  : {over, nothing, 0, 1, 2} ;
+   things : array 0..2 of boolean ;
+   across : boolean ;
+ ASSIGN
+   init(takes) := nothing ;
+   -- everyone starts not-across the river
+   init(things[0]) := FALSE ;
+   init(things[1]) := FALSE ;
+   init(things[2]) := FALSE ;
+   init(across) := FALSE ;
+   -- farmer always crosses the river
+   next(takes) := case
+                    -- over
+                    across = TRUE & across = things[0] & across = things[1] & across = things[2] : over ;
+                    -- c,l,w -> l
+                    across = things[2] & across = things[1] & across = things[0] : 1 ;
+                    -- c,l -> c,l
+                    across = things[0] & across = things[1] : {0,1} ;
+                    -- c,w -> c,w,-1
+                    across = things[0] & across = things[2] : {nothing,0,2} ;
+                    -- l,w -> l,w
+                    across = things[1] & across = things[2] : {1,2} ;
+                    -- l -> {l,-1}
+                    across = things[1] : {nothing,1} ;
+                    -- w -> WRONG or c -> WRONG
+                    TRUE : over ;
+                  esac ;
+   next(things[0]) := takes = 0 ? ! things[0] : things [0] ;
+   next(things[1]) := takes = 1 ? ! things[1] : things [1] ;
+   next(things[2]) := takes = 2 ? ! things[2] : things [2] ;
+   -- don't move farmer if over
+   next(across) := takes = over ? across : ! across ;
+ INVARSPEC ! (across != things[0] & across != things[1]) ;
+
+MODULE thing(taken)
+ VAR
+   across : boolean ;
+ DEFINE
+   across :=
