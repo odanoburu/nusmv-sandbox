@@ -1,0 +1,3 @@
+MODULE main
+ VAR
+   edges : array 0..5 of array 0..5 of {-1,0,1} ;
