@@ -1,19 +1,20 @@
 MODULE main
  VAR
    -- decide which thing farmer will take with him, if anything
-   takes  : {over, nothing, cabbage, lamb, wolf} ;
+   takes : {over, nothing, cabbage, lamb, wolf} ;
+   -- is thing over the river?
    cabbage-over : boolean ;
-   lamb-over : boolean ;
-   wolf-over : boolean ;
-   farmer-over : boolean ;
+   lamb-over    : boolean ;
+   wolf-over    : boolean ;
+   farmer-over  : boolean ;
  ASSIGN
    -- takes nothing in the first round
    init(takes) := nothing ;
    -- everyone starts not-over the river
    init(cabbage-over) := FALSE ;
-   init(lamb-over) := FALSE ;
-   init(wolf-over) := FALSE ;
-   init(farmer-over) := FALSE ;
+   init(lamb-over)    := FALSE ;
+   init(wolf-over)    := FALSE ;
+   init(farmer-over)  := FALSE ;
    -- what the farmer takes with him
    next(takes) := case
                     -- everyone over the river
@@ -33,10 +34,10 @@ MODULE main
                   esac ;
    -- move thing?
    next(cabbage-over) := next(takes) = cabbage ? ! cabbage-over : cabbage-over ;
-   next(lamb-over) := next(takes) = lamb ? ! lamb-over : lamb-over ;
-   next(wolf-over) := next(takes) = wolf ? ! wolf-over : wolf-over ;
+   next(lamb-over)    := next(takes) = lamb ? ! lamb-over : lamb-over ;
+   next(wolf-over)    := next(takes) = wolf ? ! wolf-over : wolf-over ;
    -- don't move farmer if over
-   next(farmer-over) := next(takes) = over ? farmer-over : ! farmer-over ;
+   next(farmer-over)  := next(takes) = over ? farmer-over : ! farmer-over ;
    
  INVARSPEC ! (farmer-over != cabbage-over & farmer-over != lamb-over) ;
  INVARSPEC ! (farmer-over != lamb-over & farmer-over != wolf-over) ;
