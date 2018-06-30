@@ -1,7 +1,8 @@
 # -*- mode:org -*-
 #+TITLE: NuSMV notes
 
-a repo to play around with [[nusmv.fbk.eu][NuSMV]].
+a repo to play around with [[nusmv.fbk.eu][NuSMV]]. you can check the accompanying entry
+in my [[http://odanoburu.github.io/research-log/nusmv-sandbox.html][research log]].
 
 * useful shell commands
 

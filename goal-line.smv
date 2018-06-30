@@ -28,7 +28,7 @@ MODULE main
  CTLSPEC AG goal-line = idle -> ball = outside
  -- no goals is a possibility
  CTLSPEC EG ball = outside & goal-line = idle
- -- ball inside goal means goal in next state
+ -- ball inside goal means goal
  INVARSPEC ball = inside -> goal-line = goal
- -- ball outside goal means no goal accused in next state
+ -- ball outside goal means no goal accused
  INVARSPEC ball = outside -> goal-line = idle

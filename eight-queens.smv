@@ -4,7 +4,7 @@ MODULE main
  CTLSPEC NAME q0 :=
    ! EF (
          -- q0
-         abs(q[0][0] - q[1][0]) != abs(q[0][1] - q[1][1]) -- diagonal
+         abs(q[0][0] - q[1][0]) != abs(q[0][1] - q[1][1]) -- diagonals
          & q[0][0] != q[1][0] & q[0][1] != q[1][1]        -- lines
          & abs(q[0][0] - q[2][0]) != abs(q[0][1] - q[2][1])
          & q[0][0] != q[2][0] & q[0][1] != q[2][1]

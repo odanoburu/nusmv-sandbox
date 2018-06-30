@@ -1,6 +1,6 @@
 MODULE main
  VAR
-   -- decide which thing farmer will take with him, if anything
+   -- decide which thing farmer will take with her, if anything
    takes : {nothing, cabbage, lamb, wolf} ;
    -- is thing over the river?
    cabbage-over : boolean ;
@@ -15,9 +15,18 @@ MODULE main
    init(lamb-over)    := FALSE ;
    init(wolf-over)    := FALSE ;
    init(farmer-over)  := FALSE ;
-   -- what the farmer takes with him -- which can be anything or
-   -- nothing
-   next(takes) := {nothing, cabbage, lamb, wolf} ;
+   -- what the farmer takes with her -- which can be anything or
+   -- nothing, as long as the thing is in the same side as she is
+   next(takes) := case
+                    farmer-over = cabbage-over & farmer-over = lamb-over & farmer-over = lamb-over : {nothing, cabbage, lamb, wolf} ;
+                    farmer-over = cabbage-over & farmer-over = lamb-over : {nothing, cabbage, lamb} ;
+                    farmer-over = cabbage-over & farmer-over = wolf-over : {nothing, cabbage, wolf} ;
+                    farmer-over = lamb-over & farmer-over = wolf-over : {nothing, lamb, wolf} ;
+                    farmer-over = cabbage-over : {nothing, cabbage} ;
+                    farmer-over = lamb-over : {nothing, lamb} ;
+                    farmer-over = wolf-over : {nothing, wolf} ;
+                    TRUE : nothing ;
+                  esac ;
    -- move thing?
    next(cabbage-over) := next(takes) = cabbage ? ! cabbage-over : cabbage-over ;
    next(lamb-over)    := next(takes) = lamb ? ! lamb-over : lamb-over ;
@@ -29,4 +38,5 @@ MODULE main
    
  CTLSPEC NAME solution := ! E [((farmer-over != cabbage-over -> farmer-over = lamb-over) -- cabbage is safe
                                 & (farmer-over != lamb-over -> farmer-over = wolf-over)) -- lamb is safe
-                                U (farmer-over = TRUE & cabbage-over = farmer-over & lamb-over = farmer-over & wolf-over = farmer-over)] -- until it is over
+                                -- until it is over
+                                U count(farmer-over, cabbage-over, lamb-over, wolf-over) = 4]
