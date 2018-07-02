@@ -1,7 +1,49 @@
+MODULE queen(q,i)
+ VAR
+   diagonal-conflict : boolean ;
+ ASSIGN
+   init(diagonal-conflict) := FALSE ;
+   next(diagonal-conflict) := count(abs(q[i][0] - q[0][0]) = abs(q[i][1] - q[0][1]),
+                                    abs(q[i][0] - q[1][0]) = abs(q[i][1] - q[1][1]),
+                                    abs(q[i][0] - q[2][0]) = abs(q[i][1] - q[2][1]),
+                                    abs(q[i][0] - q[3][0]) = abs(q[i][1] - q[3][1]),
+                                    abs(q[i][0] - q[4][0]) = abs(q[i][1] - q[4][1]),
+                                    abs(q[i][0] - q[5][0]) = abs(q[i][1] - q[5][1]),
+                                    abs(q[i][0] - q[6][0]) = abs(q[i][1] - q[6][1]),
+                                    abs(q[i][0] - q[7][0]) = abs(q[i][1] - q[7][1]))
+                                    > 1 ;
+   next(q[i][0]) :=  case
+                       next(diagonal-conflict)
+                       | count(q[i][0] = q[0][0], q[i][0] = q[1][0],
+                               q[i][0] = q[2][0], q[i][0] = q[3][0],
+                               q[i][0] = q[4][0], q[i][0] = q[5][0],
+                               q[i][0] = q[6][0], q[i][0] = q[7][0])
+                               > 1 : {0,1,2,3,4,5,6,7} ;
+                       TRUE : q[i][0] ;
+                     esac ;
+   next(q[i][1]) := case
+                      next(diagonal-conflict)
+                      | count(q[i][1] = q[0][1], q[i][1] = q[1][1],
+                              q[i][1] = q[2][1], q[i][1] = q[3][1],
+                              q[i][1] = q[4][1], q[i][1] = q[5][1],
+                              q[i][1] = q[6][1], q[i][1] = q[7][1])
+                              > 1 : {0,1,2,3,4,5,6,7} ;
+                      TRUE : q[i][1] ;
+                    esac ;
+
 MODULE main
  VAR
-   q : array 0..7 of array 0..1 of 0..7 ;
- CTLSPEC NAME q0 :=
+   q  : array 0..7 of array 0..1 of 0..7 ;
+   q0 : queen(q, 0) ;
+   q1 : queen(q, 1) ;
+   q2 : queen(q, 2) ;
+   q3 : queen(q, 3) ;
+   q4 : queen(q, 4) ;
+   q5 : queen(q, 5) ;
+   q6 : queen(q, 6) ;
+   q7 : queen(q, 7) ;
+
+ CTLSPEC NAME solution :=
    ! EF (
          -- q0
          abs(q[0][0] - q[1][0]) != abs(q[0][1] - q[1][1]) -- diagonals
