@@ -3,31 +3,44 @@ MODULE main
    q : array 0..7 of array 0..1 of 0..7 ;
    r : array 0..7 of {h, v, n} ;
  ASSIGN
-   r[0] := n ;
-   init(r[1]) := h ;
-   init(r[2]) := h ;
-   init(r[3]) := h ;
-   init(r[4]) := h ;
-   init(r[5]) := h ;
-   init(r[6]) := h ;
-   init(r[7]) := h ;
+   r[0] := n ; -- starts in position
+   -- do not start in position
+   init(r[1]) := {h,v} ;
+   init(r[2]) := {h,v} ;
+   init(r[3]) := {h,v} ;
+   init(r[4]) := {h,v} ;
+   init(r[5]) := {h,v} ;
+   init(r[6]) := {h,v} ;
+   init(r[7]) := {h,v} ;
    next(r[1]) := case
+                   -- if in position, continue in position
                    r[1] = n : n ;
+                   -- report horizontal conflict
                    q[0][0] = q[1][0] : h ;
+                   -- report vertical conflict
                    q[0][1] = q[1][1] : v ;
+                   -- report diagonal conflict
                    abs(q[0][0] - q[1][0]) = abs(q[0][1] - q[1][1]) : {h,v} ;
+                   -- report no conflict
                    TRUE : n ;
                  esac ;
    next(q[1][0]) := case
+                      -- if in position or in vertical conflict,
+                      -- maintain horizontal position
                       next(r[1]) = n | next(r[1]) = v : q[1][0] ;
+                      -- change horizontal position
                       TRUE : (q[1][0] + 1) mod 8  ;
                     esac ;
    next(q[1][1]) := case
+                      -- if in position or in horizontal conflict,
+                      -- maintain vertical position
                       next(r[1]) = n | next(r[1]) = h : q[1][1] ;
+                      -- change vertical position
                       TRUE : (q[1][1] + 1) mod 8  ;
                     esac ;
    next(r[2]) := case
-                   next(r[1]) != n : h ;
+                   -- don't care about position until 1 is settled
+                   r[1] != n : h ;
                    r[2] = n : n ;
                    q[0][0] = q[2][0]
                    | q[1][0] = q[2][0] : h ;
@@ -46,7 +59,7 @@ MODULE main
                       TRUE : (q[2][1] + 1) mod 8  ;
                     esac ;
    next(r[3]) := case
-                   next(r[2]) != n : h ;
+                   r[2] != n : h ;
                    r[3] = n : n ;
                    q[0][0] = q[3][0]
                    | q[1][0] = q[3][0]
@@ -68,7 +81,7 @@ MODULE main
                       TRUE : (q[3][1] + 1) mod 8  ;
                     esac ;
    next(r[4]) := case
-                   next(r[3]) != n : h ;
+                   r[3] != n : h ;
                    r[4] = n : n ;
                    q[0][0] = q[4][0]
                    | q[1][0] = q[4][0]
@@ -93,7 +106,7 @@ MODULE main
                       TRUE : (q[4][1] + 1) mod 8  ;
                     esac ;
    next(r[5]) := case
-                   next(r[4]) != n : h ;
+                   r[4] != n : h ;
                    r[5] = n : n ;
                    q[0][0] = q[5][0]
                    | q[1][0] = q[5][0]
@@ -121,7 +134,7 @@ MODULE main
                       TRUE : (q[5][1] + 1) mod 8  ;
                     esac ;
    next(r[6]) := case
-                   next(r[5]) != n : h ;
+                   r[5] != n : h ;
                    r[6] = n : n ;
                    q[0][0] = q[6][0]
                    | q[1][0] = q[6][0]
@@ -152,7 +165,7 @@ MODULE main
                       TRUE : (q[6][1] + 1) mod 8  ;
                     esac ;
    next(r[7]) := case
-                   next(r[6]) != n : h ;
+                   r[6] != n : h ;
                    r[7] = n : n ;
                    q[0][0] = q[7][0]
                    | q[1][0] = q[7][0]
@@ -185,3 +198,5 @@ MODULE main
                       next(r[7]) = n | next(r[7]) = h : q[7][1] ;
                       TRUE : (q[7][1] + 1) mod 8  ;
                     esac ;
+
+ CTLSPEC NAME solution := EF (r[0] = n & r[1] = n & r[2] = n & r[3] = n & r[4] = n & r[5] = n & r[6] = n & r[7] =n)
