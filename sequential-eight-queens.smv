@@ -199,4 +199,4 @@ MODULE main
                       TRUE : (q[7][1] + 1) mod 8  ;
                     esac ;
 
- CTLSPEC NAME solution := EF (r[0] = n & r[1] = n & r[2] = n & r[3] = n & r[4] = n & r[5] = n & r[6] = n & r[7] =n)
+ CTLSPEC NAME solution := ! EF (r[0] = n & r[1] = n & r[2] = n & r[3] = n & r[4] = n & r[5] = n & r[6] = n & r[7] =n)
