@@ -15,24 +15,24 @@ MODULE main
    next(r[1]) := case
                    -- if in position, continue in position
                    r[1] = n : n ;
-                   -- report horizontal conflict
-                   q[0][0] = q[1][0] : h ;
-                   -- report vertical conflict
-                   q[0][1] = q[1][1] : v ;
-                   -- report diagonal conflict
-                   abs(q[0][0] - q[1][0]) = abs(q[0][1] - q[1][1]) : {h,v} ;
+                   -- if horizontal conflict
+                   q[0][0] = q[1][0]
+                   -- or vertical conflict
+                   | q[0][1] = q[1][1]
+                   -- or diagonal conflict, move.
+                   | abs(q[0][0] - q[1][0]) = abs(q[0][1] - q[1][1]) : {h,v} ;
                    -- report no conflict
                    TRUE : n ;
                  esac ;
    next(q[1][0]) := case
-                      -- if in position or in vertical conflict,
-                      -- maintain horizontal position
+                      -- if not moving or moving vertically, maintain
+                      -- horizontal position
                       next(r[1]) = n | next(r[1]) = v : q[1][0] ;
                       -- change horizontal position
                       TRUE : (q[1][0] + 1) mod 8  ;
                     esac ;
    next(q[1][1]) := case
-                      -- if in position or in horizontal conflict,
+                      -- if not moving or moving horizontally,
                       -- maintain vertical position
                       next(r[1]) = n | next(r[1]) = h : q[1][1] ;
                       -- change vertical position
@@ -43,10 +43,10 @@ MODULE main
                    r[1] != n : h ;
                    r[2] = n : n ;
                    q[0][0] = q[2][0]
-                   | q[1][0] = q[2][0] : h ;
-                   q[0][1] = q[2][1]
-                   | q[1][1] = q[2][1] : v;
-                   abs(q[0][0] - q[2][0]) = abs(q[0][1] - q[2][1])
+                   | q[1][0] = q[2][0]
+                   | q[0][1] = q[2][1]
+                   | q[1][1] = q[2][1]
+                   | abs(q[0][0] - q[2][0]) = abs(q[0][1] - q[2][1])
                    | abs(q[1][0] - q[2][0]) = abs(q[1][1] - q[2][1]) : {h,v} ;
                    TRUE : n ;
                  esac ;                    
@@ -63,11 +63,11 @@ MODULE main
                    r[3] = n : n ;
                    q[0][0] = q[3][0]
                    | q[1][0] = q[3][0]
-                   | q[2][0] = q[3][0] : h ;
-                   q[0][1] = q[3][1]
+                   | q[2][0] = q[3][0]
+                   | q[0][1] = q[3][1]
                    | q[1][1] = q[3][1]
-                   | q[2][1] = q[3][1] : v ;
-                   abs(q[0][0] - q[3][0]) = abs(q[0][1] - q[3][1])
+                   | q[2][1] = q[3][1]
+                   | abs(q[0][0] - q[3][0]) = abs(q[0][1] - q[3][1])
                    | abs(q[1][0] - q[3][0]) = abs(q[1][1] - q[3][1])
                    | abs(q[2][0] - q[3][0]) = abs(q[2][1] - q[3][1]) : {h,v} ;
                    TRUE : n ;
@@ -86,12 +86,12 @@ MODULE main
                    q[0][0] = q[4][0]
                    | q[1][0] = q[4][0]
                    | q[2][0] = q[4][0]
-                   | q[3][0] = q[4][0] : h ;
-                   q[0][1] = q[4][1]
+                   | q[3][0] = q[4][0]
+                   | q[0][1] = q[4][1]
                    | q[1][1] = q[4][1]
                    | q[2][1] = q[4][1]
-                   | q[3][1] = q[4][1] : v ;
-                   abs(q[0][0] - q[4][0]) = abs(q[0][1] - q[4][1])
+                   | q[3][1] = q[4][1]
+                   | abs(q[0][0] - q[4][0]) = abs(q[0][1] - q[4][1])
                    | abs(q[1][0] - q[4][0]) = abs(q[1][1] - q[4][1])
                    | abs(q[2][0] - q[4][0]) = abs(q[2][1] - q[4][1])
                    | abs(q[3][0] - q[4][0]) = abs(q[3][1] - q[4][1]) : {h,v} ;
@@ -112,13 +112,13 @@ MODULE main
                    | q[1][0] = q[5][0]
                    | q[2][0] = q[5][0]
                    | q[3][0] = q[5][0]
-                   | q[4][0] = q[5][0] : h ;
-                   q[0][1] = q[5][1]
+                   | q[4][0] = q[5][0]
+                   | q[0][1] = q[5][1]
                    | q[1][1] = q[5][1]
                    | q[2][1] = q[5][1]
                    | q[3][1] = q[5][1]
-                   | q[4][1] = q[5][1] : v ;
-                   abs(q[0][0] - q[5][0]) = abs(q[0][1] - q[5][1])
+                   | q[4][1] = q[5][1]
+                   | abs(q[0][0] - q[5][0]) = abs(q[0][1] - q[5][1])
                    | abs(q[1][0] - q[5][0]) = abs(q[1][1] - q[5][1])
                    | abs(q[2][0] - q[5][0]) = abs(q[2][1] - q[5][1])
                    | abs(q[3][0] - q[5][0]) = abs(q[3][1] - q[5][1])
@@ -141,14 +141,14 @@ MODULE main
                    | q[2][0] = q[6][0]
                    | q[3][0] = q[6][0]
                    | q[4][0] = q[6][0]
-                   | q[5][0] = q[6][0] : h ;
-                   q[0][1] = q[6][1]
+                   | q[5][0] = q[6][0]
+                   | q[0][1] = q[6][1]
                    | q[1][1] = q[6][1]
                    | q[2][1] = q[6][1]
                    | q[3][1] = q[6][1]
                    | q[4][1] = q[6][1]
-                   | q[5][1] = q[6][1] : v ;
-                   abs(q[0][0] - q[6][0]) = abs(q[0][1] - q[6][1])
+                   | q[5][1] = q[6][1]
+                   | abs(q[0][0] - q[6][0]) = abs(q[0][1] - q[6][1])
                    | abs(q[1][0] - q[6][0]) = abs(q[1][1] - q[6][1])
                    | abs(q[2][0] - q[6][0]) = abs(q[2][1] - q[6][1])
                    | abs(q[3][0] - q[6][0]) = abs(q[3][1] - q[6][1])
@@ -173,15 +173,15 @@ MODULE main
                    | q[3][0] = q[7][0]
                    | q[4][0] = q[7][0]
                    | q[5][0] = q[7][0]
-                   | q[6][0] = q[7][0] : h ;
-                   q[0][1] = q[7][1]
+                   | q[6][0] = q[7][0]
+                   | q[0][1] = q[7][1]
                    | q[1][1] = q[7][1]
                    | q[2][1] = q[7][1]
                    | q[3][1] = q[7][1]
                    | q[4][1] = q[7][1]
                    | q[5][1] = q[7][1]
-                   | q[6][1] = q[7][1] : v ;
-                   abs(q[0][0] - q[7][0]) = abs(q[0][1] - q[7][1])
+                   | q[6][1] = q[7][1]
+                   | abs(q[0][0] - q[7][0]) = abs(q[0][1] - q[7][1])
                    | abs(q[1][0] - q[7][0]) = abs(q[1][1] - q[7][1])
                    | abs(q[2][0] - q[7][0]) = abs(q[2][1] - q[7][1])
                    | abs(q[3][0] - q[7][0]) = abs(q[3][1] - q[7][1])
@@ -199,4 +199,4 @@ MODULE main
                       TRUE : (q[7][1] + 1) mod 8  ;
                     esac ;
 
- CTLSPEC NAME solution := ! EF (r[0] = n & r[1] = n & r[2] = n & r[3] = n & r[4] = n & r[5] = n & r[6] = n & r[7] =n)
+ CTLSPEC NAME solution := AG (r[0] != n | r[1] != n | r[2] != n | r[3] != n | r[4] != n | r[5] != n | r[6] != n | r[7] != n)
