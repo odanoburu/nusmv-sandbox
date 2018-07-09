@@ -1,150 +1,59 @@
+MODULE queen(id, eq)
+ VAR
+   x : {0,1,2,3,4,5,6,7} ;
+   y : {0,1,2,3,4,5,6,7} ;
+ ASSIGN
+   x := id ;
+   init(y) := {0,1,2,3,4,5,6,7} ;
+   next(y) := case
+                eq = TRUE : y ;
+                TRUE : {0,1,2,3,4,5,6,7} ;
+              esac ;
+
 MODULE main
  VAR
-   q : array 0..7 of array 0..1 of 0..7 ;
-   r : array 0..7 of {v, n} ;
+   eq : boolean ;
+   q0 : queen(0,eq) ;
+   q1 : queen(1,eq) ;
+   q2 : queen(2,eq) ;
+   q3 : queen(3,eq) ;
+   q4 : queen(4,eq) ;
+   q5 : queen(5,eq) ;
+   q6 : queen(6,eq) ;
+   q7 : queen(7,eq) ;
  ASSIGN
-   r[0] := n ; -- starts in position
-   q[0][0] := 0 ;
-   q[1][0] := 1 ;
-   q[2][0] := 2 ;
-   q[3][0] := 3 ;
-   q[4][0] := 4 ;
-   q[5][0] := 5 ;
-   q[6][0] := 6 ;
-   q[7][0] := 7 ;
-   -- do not start in position
-   init(r[1]) := v ;
-   init(r[2]) := v ;
-   init(r[3]) := v ;
-   init(r[4]) := v ;
-   init(r[5]) := v ;
-   init(r[6]) := v ;
-   init(r[7]) := v ;
-   next(r[1]) := case
-                   -- if in position, continue in position
-                   r[1] = n : n ;
-                   -- or vertical conflict
-                   q[0][1] = q[1][1]
-                   -- or diagonal conflict, move.
-                   | abs(q[0][0] - q[1][0]) = abs(q[0][1] - q[1][1]) : v ;
-                   -- report no conflict
-                   TRUE : n ;
-                 esac ;
-   next(q[1][1]) := case
-                      -- if not moving or moving horizontally,
-                      -- maintain vertical position
-                      next(r[1]) = n : q[1][1] ;
-                      -- change vertical position
-                      TRUE : (q[1][1] + 1) mod 8  ;
-                    esac ;
-   next(r[2]) := case
-                   -- don't care about position until 1 is settled
-                   r[1] != n : v ;
-                   r[2] = n : n ;
-                   q[0][1] = q[2][1]
-                   | q[1][1] = q[2][1]
-                   | abs(q[0][0] - q[2][0]) = abs(q[0][1] - q[2][1])
-                   | abs(q[1][0] - q[2][0]) = abs(q[1][1] - q[2][1]) : v ;
-                   TRUE : n ;
-                 esac ;                    
-   next(q[2][1]) := case
-                      next(r[2]) = n : q[2][1] ;
-                      TRUE : (q[2][1] + 1) mod 8  ;
-                    esac ;
-   next(r[3]) := case
-                   r[2] != n : v ;
-                   r[3] = n : n ;
-                   q[0][1] = q[3][1]
-                   | q[1][1] = q[3][1]
-                   | q[2][1] = q[3][1]
-                   | abs(q[0][0] - q[3][0]) = abs(q[0][1] - q[3][1])
-                   | abs(q[1][0] - q[3][0]) = abs(q[1][1] - q[3][1])
-                   | abs(q[2][0] - q[3][0]) = abs(q[2][1] - q[3][1]) : v ;
-                   TRUE : n ;
-                 esac ;
-   next(q[3][1]) := case
-                      next(r[3]) = n : q[3][1] ;
-                      TRUE : (q[3][1] + 1) mod 8  ;
-                    esac ;
-   next(r[4]) := case
-                   r[3] != n : v ;
-                   r[4] = n : n ;
-                   q[0][1] = q[4][1]
-                   | q[1][1] = q[4][1]
-                   | q[2][1] = q[4][1]
-                   | q[3][1] = q[4][1]
-                   | abs(q[0][0] - q[4][0]) = abs(q[0][1] - q[4][1])
-                   | abs(q[1][0] - q[4][0]) = abs(q[1][1] - q[4][1])
-                   | abs(q[2][0] - q[4][0]) = abs(q[2][1] - q[4][1])
-                   | abs(q[3][0] - q[4][0]) = abs(q[3][1] - q[4][1]) : v ;
-                   TRUE : n;
-                 esac ;
-   next(q[4][1]) := case
-                      next(r[4]) = n : q[4][1] ;
-                      TRUE : (q[4][1] + 1) mod 8  ;
-                    esac ;
-   next(r[5]) := case
-                   r[4] != n : v ;
-                   r[5] = n : n ;
-                   q[0][1] = q[5][1]
-                   | q[1][1] = q[5][1]
-                   | q[2][1] = q[5][1]
-                   | q[3][1] = q[5][1]
-                   | q[4][1] = q[5][1]
-                   | abs(q[0][0] - q[5][0]) = abs(q[0][1] - q[5][1])
-                   | abs(q[1][0] - q[5][0]) = abs(q[1][1] - q[5][1])
-                   | abs(q[2][0] - q[5][0]) = abs(q[2][1] - q[5][1])
-                   | abs(q[3][0] - q[5][0]) = abs(q[3][1] - q[5][1])
-                   | abs(q[4][0] - q[5][0]) = abs(q[4][1] - q[5][1]) : v ;
-                   TRUE : n ;
-                 esac;
-   next(q[5][1]) := case
-                      next(r[5]) = n : q[5][1] ;
-                      TRUE : (q[5][1] + 1) mod 8  ;
-                    esac ;
-   next(r[6]) := case
-                   r[5] != n : v ;
-                   r[6] = n : n ;
-                   q[0][1] = q[6][1]
-                   | q[1][1] = q[6][1]
-                   | q[2][1] = q[6][1]
-                   | q[3][1] = q[6][1]
-                   | q[4][1] = q[6][1]
-                   | q[5][1] = q[6][1]
-                   | abs(q[0][0] - q[6][0]) = abs(q[0][1] - q[6][1])
-                   | abs(q[1][0] - q[6][0]) = abs(q[1][1] - q[6][1])
-                   | abs(q[2][0] - q[6][0]) = abs(q[2][1] - q[6][1])
-                   | abs(q[3][0] - q[6][0]) = abs(q[3][1] - q[6][1])
-                   | abs(q[4][0] - q[6][0]) = abs(q[4][1] - q[6][1])
-                   | abs(q[5][0] - q[6][0]) = abs(q[5][1] - q[6][1]) : v ;
-                   TRUE : n ;
-                 esac ;
-   next(q[6][1]) := case
-                      next(r[6]) = n : q[6][1] ;
-                      TRUE : (q[6][1] + 1) mod 8  ;
-                    esac ;
-   next(r[7]) := case
-                   r[6] != n : v ;
-                   r[7] = n : n ;
-                   q[0][1] = q[7][1]
-                   | q[1][1] = q[7][1]
-                   | q[2][1] = q[7][1]
-                   | q[3][1] = q[7][1]
-                   | q[4][1] = q[7][1]
-                   | q[5][1] = q[7][1]
-                   | q[6][1] = q[7][1]
-                   | abs(q[0][0] - q[7][0]) = abs(q[0][1] - q[7][1])
-                   | abs(q[1][0] - q[7][0]) = abs(q[1][1] - q[7][1])
-                   | abs(q[2][0] - q[7][0]) = abs(q[2][1] - q[7][1])
-                   | abs(q[3][0] - q[7][0]) = abs(q[3][1] - q[7][1])
-                   | abs(q[4][0] - q[7][0]) = abs(q[4][1] - q[7][1])
-                   | abs(q[5][0] - q[7][0]) = abs(q[5][1] - q[7][1])
-                   | abs(q[6][0] - q[7][0]) = abs(q[6][1] - q[7][1]) : v ;
-                   TRUE : n ;
-                 esac ;
-   next(q[7][1]) := case
-                      next(r[7]) = n : q[7][1] ;
-                      TRUE : (q[7][1] + 1) mod 8  ;
-                    esac ;
+   init(eq) := FALSE ;
+   next(eq) := case
+                 abs(q0.x - q1.x) = abs(q0.y - q1.y)
+                 | abs(q0.x - q2.x) = abs(q0.y - q2.y)
+                 | abs(q1.x - q2.x) = abs(q1.y - q2.y)
+                 | abs(q0.x - q3.x) = abs(q0.y - q3.y)
+                 | abs(q1.x - q3.x) = abs(q1.y - q3.y)
+                 | abs(q2.x - q3.x) = abs(q2.y - q3.y)
+                 | abs(q0.x - q4.x) = abs(q0.y - q4.y)
+                 | abs(q1.x - q4.x) = abs(q1.y - q4.y)
+                 | abs(q2.x - q4.x) = abs(q2.y - q4.y)
+                 | abs(q3.x - q4.x) = abs(q3.y - q4.y)
+                 | abs(q0.x - q5.x) = abs(q0.y - q5.y)
+                 | abs(q1.x - q5.x) = abs(q1.y - q5.y)
+                 | abs(q2.x - q5.x) = abs(q2.y - q5.y)
+                 | abs(q3.x - q5.x) = abs(q3.y - q5.y)
+                 | abs(q4.x - q5.x) = abs(q4.y - q5.y)
+                 | abs(q0.x - q6.x) = abs(q0.y - q6.y)
+                 | abs(q1.x - q6.x) = abs(q1.y - q6.y)
+                 | abs(q2.x - q6.x) = abs(q2.y - q6.y)
+                 | abs(q3.x - q6.x) = abs(q3.y - q6.y)
+                 | abs(q4.x - q6.x) = abs(q4.y - q6.y)
+                 | abs(q5.x - q6.x) = abs(q5.y - q6.y)
+                 | abs(q0.x - q7.x) = abs(q0.y - q7.y)
+                 | abs(q1.x - q7.x) = abs(q1.y - q7.y)
+                 | abs(q2.x - q7.x) = abs(q2.y - q7.y)
+                 | abs(q3.x - q7.x) = abs(q3.y - q7.y)
+                 | abs(q4.x - q7.x) = abs(q4.y - q7.y)
+                 | abs(q5.x - q7.x) = abs(q5.y - q7.y)
+                 | abs(q6.x - q7.x) = abs(q6.y - q7.y)
+                 : FALSE ;
+                 TRUE : TRUE ;
+               esac ;
 
- CTLSPEC NAME solution := AG (r[0] != n | r[1] != n | r[2] != n | r[3] != n | r[4] != n | r[5] != n | r[6] != n | r[7] != n)
+ CTLSPEC NAME solution := AG eq = FALSE
