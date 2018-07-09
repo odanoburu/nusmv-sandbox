@@ -1,12 +1,18 @@
-MODULE queen(id, eq)
+MODULE queen(ix, eq)
  VAR
+   -- horizontal position
    x : {0,1,2,3,4,5,6,7} ;
+   -- vertical position
    y : {0,1,2,3,4,5,6,7} ;
  ASSIGN
-   x := id ;
+   -- horizontal position is fixed by queen's index
+   x := ix ;
+   -- queen might start at any vertical position
    init(y) := {0,1,2,3,4,5,6,7} ;
    next(y) := case
-                eq = TRUE : y ;
+                -- don't move if in equilibrium
+                next(eq) = TRUE : y ;
+                -- else move somewhere
                 TRUE : {0,1,2,3,4,5,6,7} ;
               esac ;
 
@@ -22,37 +28,71 @@ MODULE main
    q6 : queen(6,eq) ;
    q7 : queen(7,eq) ;
  ASSIGN
+   -- start at disequilibrium
    init(eq) := FALSE ;
    next(eq) := case
-                 abs(q0.x - q1.x) = abs(q0.y - q1.y)
-                 | abs(q0.x - q2.x) = abs(q0.y - q2.y)
-                 | abs(q1.x - q2.x) = abs(q1.y - q2.y)
-                 | abs(q0.x - q3.x) = abs(q0.y - q3.y)
-                 | abs(q1.x - q3.x) = abs(q1.y - q3.y)
-                 | abs(q2.x - q3.x) = abs(q2.y - q3.y)
-                 | abs(q0.x - q4.x) = abs(q0.y - q4.y)
-                 | abs(q1.x - q4.x) = abs(q1.y - q4.y)
-                 | abs(q2.x - q4.x) = abs(q2.y - q4.y)
-                 | abs(q3.x - q4.x) = abs(q3.y - q4.y)
-                 | abs(q0.x - q5.x) = abs(q0.y - q5.y)
-                 | abs(q1.x - q5.x) = abs(q1.y - q5.y)
-                 | abs(q2.x - q5.x) = abs(q2.y - q5.y)
-                 | abs(q3.x - q5.x) = abs(q3.y - q5.y)
-                 | abs(q4.x - q5.x) = abs(q4.y - q5.y)
-                 | abs(q0.x - q6.x) = abs(q0.y - q6.y)
-                 | abs(q1.x - q6.x) = abs(q1.y - q6.y)
-                 | abs(q2.x - q6.x) = abs(q2.y - q6.y)
-                 | abs(q3.x - q6.x) = abs(q3.y - q6.y)
-                 | abs(q4.x - q6.x) = abs(q4.y - q6.y)
-                 | abs(q5.x - q6.x) = abs(q5.y - q6.y)
-                 | abs(q0.x - q7.x) = abs(q0.y - q7.y)
-                 | abs(q1.x - q7.x) = abs(q1.y - q7.y)
-                 | abs(q2.x - q7.x) = abs(q2.y - q7.y)
-                 | abs(q3.x - q7.x) = abs(q3.y - q7.y)
-                 | abs(q4.x - q7.x) = abs(q4.y - q7.y)
-                 | abs(q5.x - q7.x) = abs(q5.y - q7.y)
-                 | abs(q6.x - q7.x) = abs(q6.y - q7.y)
+                 -- if in equilibrium, stay there
+                 eq = TRUE : TRUE ;
+                 -- if any queen may attack another, not in
+                 -- equilibrium
+                 abs(q0.y - q1.y) = 1
+                 | abs(q0.y - q1.y) = 0
+                 | abs(q0.y - q2.y) = 2
+                 | abs(q0.y - q2.y) = 0
+                 | abs(q1.y - q2.y) = 1
+                 | abs(q1.y - q2.y) = 0
+                 | abs(q0.y - q3.y) = 3
+                 | abs(q0.y - q3.y) = 0
+                 | abs(q1.y - q3.y) = 2
+                 | abs(q1.y - q3.y) = 0
+                 | abs(q2.y - q3.y) = 1
+                 | abs(q2.y - q3.y) = 0
+                 | abs(q0.y - q4.y) = 4
+                 | abs(q0.y - q4.y) = 0
+                 | abs(q1.y - q4.y) = 3
+                 | abs(q1.y - q4.y) = 0
+                 | abs(q2.y - q4.y) = 2
+                 | abs(q2.y - q4.y) = 0
+                 | abs(q3.y - q4.y) = 1
+                 | abs(q3.y - q4.y) = 0
+                 | abs(q0.y - q5.y) = 5
+                 | abs(q0.y - q5.y) = 0
+                 | abs(q1.y - q5.y) = 4
+                 | abs(q1.y - q5.y) = 0
+                 | abs(q2.y - q5.y) = 3
+                 | abs(q2.y - q5.y) = 0
+                 | abs(q3.y - q5.y) = 2
+                 | abs(q3.y - q5.y) = 0
+                 | abs(q4.y - q5.y) = 1
+                 | abs(q4.y - q5.y) = 0
+                 | abs(q0.y - q6.y) = 6
+                 | abs(q0.y - q6.y) = 0
+                 | abs(q1.y - q6.y) = 5
+                 | abs(q1.y - q6.y) = 0
+                 | abs(q2.y - q6.y) = 4
+                 | abs(q2.y - q6.y) = 0
+                 | abs(q3.y - q6.y) = 3
+                 | abs(q3.y - q6.y) = 0
+                 | abs(q4.y - q6.y) = 2
+                 | abs(q4.y - q6.y) = 0
+                 | abs(q5.y - q6.y) = 1
+                 | abs(q5.y - q6.y) = 0
+                 | abs(q0.y - q7.y) = 7
+                 | abs(q0.y - q7.y) = 0
+                 | abs(q1.y - q7.y) = 6
+                 | abs(q1.y - q7.y) = 0
+                 | abs(q2.y - q7.y) = 5
+                 | abs(q2.y - q7.y) = 0
+                 | abs(q3.y - q7.y) = 4
+                 | abs(q3.y - q7.y) = 0
+                 | abs(q4.y - q7.y) = 3
+                 | abs(q4.y - q7.y) = 0
+                 | abs(q5.y - q7.y) = 2
+                 | abs(q5.y - q7.y) = 0
+                 | abs(q6.y - q7.y) = 1
+                 | abs(q6.y - q7.y) = 0
                  : FALSE ;
+                 -- else in equilibrium
                  TRUE : TRUE ;
                esac ;
 
